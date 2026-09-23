@@ -22,7 +22,15 @@ As a security student, you'll spend a lot of time analyzing servers — but anal
 - Where files, permissions, and services live on a Linux box
 - What a target server looks like "from the inside" — invaluable when you later study web app security, misconfiguration hunting, or defensive hardening
 
-> 💡 **Learning tip:** Don't just copy-paste the commands. Read the CLI breakdown under each block — that's where the actual understanding happens.
+> 💡 **Learning tip:** Every command block below is copy-paste ready — no `$` prompts or inline comments inside them. Explanations are given separately underneath.
+
+---
+
+## 🖼️ Architecture Overview
+
+![LAMP Stack Architecture](./images/lamp-architecture.svg)
+
+*How a request flows: Browser → Apache → PHP → MySQL, and back.*
 
 ---
 
@@ -58,12 +66,13 @@ You'll need one of the following, either as a VM, cloud instance, or spare machi
 
 **LAMP** = **L**inux + **A**pache + **M**ySQL + **P**HP — the most common stack for serving dynamic websites.
 
-<details open>
-<summary><b>🔹 2.1 — Install Apache (the web server)</b></summary>
+![Setup Pipeline](./images/setup-flow.svg)
+
+### 🔹 2.1 — Install Apache (the web server)
 
 ```bash
-$ sudo apt update
-$ sudo apt install apache2
+sudo apt update
+sudo apt install apache2
 ```
 
 ```console
@@ -74,13 +83,10 @@ install         → install the named software package
 apache2         → software that turns this machine into a web server
 ```
 
-</details>
-
-<details>
-<summary><b>🔹 2.2 — Install MySQL (the database server)</b></summary>
+### 🔹 2.2 — Install MySQL (the database server)
 
 ```bash
-$ sudo apt install mysql-server
+sudo apt install mysql-server
 ```
 
 ```console
@@ -89,13 +95,10 @@ apt install     → install the named software package
 mysql-server    → software for creating and managing databases
 ```
 
-</details>
-
-<details>
-<summary><b>🔹 2.3 — Install PHP</b></summary>
+### 🔹 2.3 — Install PHP
 
 ```bash
-$ sudo apt install php libapache2-mod-php php-mysql
+sudo apt install php libapache2-mod-php php-mysql
 ```
 
 ```console
@@ -104,8 +107,6 @@ libapache2-mod-php      → connects PHP to the Apache web server
 php-mysql               → lets PHP talk to the MySQL database
 ```
 
-</details>
-
 ---
 
 ## 📂 Step 3: Uploading Your Website Files
@@ -113,7 +114,7 @@ php-mysql               → lets PHP talk to the MySQL database
 All website files live in `/var/www/html/`. Let's create a simple `index.html`:
 
 ```bash
-$ sudo nano /var/www/html/index.html
+sudo nano /var/www/html/index.html
 ```
 
 ```console
@@ -122,7 +123,7 @@ nano                → simple terminal text editor
 index.html          → homepage file a browser loads by default
 ```
 
-**Example content to paste in:**
+**Example content to paste inside the editor:**
 
 ```html
 <!DOCTYPE html>
@@ -147,8 +148,8 @@ Save and exit with `Ctrl + X`, then `Y`, then `Enter`.
 Apache runs as the `www-data` user — it needs the right ownership and permissions to actually read your files.
 
 ```bash
-$ sudo chown -R www-data:www-data /var/www/html/
-$ sudo chmod -R 755 /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 ```
 
 ```console
@@ -166,7 +167,7 @@ chmod                     → change read/write/execute permissions
 If UFW (Uncomplicated Firewall) is active, open the web ports:
 
 ```bash
-$ sudo ufw allow 'Apache Full'
+sudo ufw allow 'Apache Full'
 ```
 
 ```console
@@ -182,12 +183,13 @@ allow              → permit a specific type of traffic
 Find your server's IP address and check it works:
 
 ```bash
-$ ip a | grep inet
-$ curl -I http://localhost
+ip a | grep inet
+curl -I http://localhost
 ```
 
+**Expected output:**
+
 ```console
-$ curl -I http://localhost
 HTTP/1.1 200 OK
 Date: Wed, 23 Sep 2026 10:12:44 GMT
 Server: Apache/2.4.58 (Ubuntu)
@@ -206,18 +208,33 @@ You should see your **"It works!"** page. 🎉
 
 ## 🗂️ Command Reference Cheat Sheet
 
-```console
-$ sudo apt update                                        # refresh package lists
-$ sudo apt install apache2                                # install Apache
-$ sudo apt install mysql-server                            # install MySQL
-$ sudo apt install php libapache2-mod-php php-mysql        # install PHP
-$ sudo nano /var/www/html/index.html                        # edit homepage
-$ sudo chown -R www-data:www-data /var/www/html/            # fix ownership
-$ sudo chmod -R 755 /var/www/html/                           # fix permissions
-$ sudo ufw allow 'Apache Full'                                # open firewall ports
-$ sudo systemctl status apache2                                # check Apache status
-$ sudo systemctl restart apache2                                # restart Apache
+Copy-paste ready, one command per line:
+
+```bash
+sudo apt update
+sudo apt install apache2
+sudo apt install mysql-server
+sudo apt install php libapache2-mod-php php-mysql
+sudo nano /var/www/html/index.html
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+sudo ufw allow 'Apache Full'
+sudo systemctl status apache2
+sudo systemctl restart apache2
 ```
+
+| Command | Purpose |
+|---|---|
+| `sudo apt update` | Refresh package lists |
+| `sudo apt install apache2` | Install Apache |
+| `sudo apt install mysql-server` | Install MySQL |
+| `sudo apt install php libapache2-mod-php php-mysql` | Install PHP |
+| `sudo nano /var/www/html/index.html` | Edit homepage |
+| `sudo chown -R www-data:www-data /var/www/html/` | Fix ownership |
+| `sudo chmod -R 755 /var/www/html/` | Fix permissions |
+| `sudo ufw allow 'Apache Full'` | Open firewall ports |
+| `sudo systemctl status apache2` | Check Apache status |
+| `sudo systemctl restart apache2` | Restart Apache |
 
 ---
 
